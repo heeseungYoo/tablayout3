@@ -37,6 +37,12 @@
             android:text="뒤"/>
 
         <Button
+            android:id="@+id/btnRedo"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:text="앞"/>
+
+        <Button
             android:id="@+id/btnErase"
             android:layout_width="70dp"
             android:layout_height="wrap_content"

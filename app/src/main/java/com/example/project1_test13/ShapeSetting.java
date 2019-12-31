@@ -10,6 +10,7 @@ import android.widget.PopupMenu;
 import android.widget.Toast;
 
 public class ShapeSetting extends Dialog{
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

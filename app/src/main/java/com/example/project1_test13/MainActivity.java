@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button btnSize= findViewById(R.id.btnSize);
         Button btnShape = findViewById(R.id.btnShape);
         Button btnUndo = findViewById(R.id.btnUndo);
+        Button btnRedo = findViewById(R.id.btnRedo);
         Button btnErase = findViewById(R.id.btnErase);
         Button btnSave = findViewById(R.id.btnSave);
 
@@ -43,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnSize.setOnClickListener(this);
         btnShape.setOnClickListener(this);
         btnUndo.setOnClickListener(this);
+        btnRedo.setOnClickListener(this);
         btnErase.setOnClickListener(this);
         btnSave.setOnClickListener(this);
 
@@ -62,11 +64,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 openShape();
                 break;
             case R.id.btnUndo:
+                drawView.onClickUndo();
                 break;
+            case R.id.btnRedo:
+                drawView.onClickRedo();
             case R.id.btnErase:
                 //두께 두껍게..?
                 break;
             case R.id.btnSave:
+
                 break;
 
         }
@@ -104,7 +110,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
     /*
-    메뉴에 쓰였던거 혹시 몰라서 남겨둠  
+    메뉴에 쓰였던거 혹시 몰라서 남겨둠
     public void openShape() {
         PopupMenu popupMenu = new PopupMenu(this, drawView);
         getMenuInflater().inflate(R.menu.shape_setting, popupMenu.getMenu());

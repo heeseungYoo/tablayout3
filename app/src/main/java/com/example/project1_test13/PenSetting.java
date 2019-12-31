@@ -13,7 +13,6 @@ public class PenSetting extends Dialog {
 
     private static final int THICKNESS_MAX = 30;
     private static final int THICKNESS_MIN = 3;
-
     private Button mLeftButton;
     private Button mRightButton;
     private SeekBar mThicknessBar;
