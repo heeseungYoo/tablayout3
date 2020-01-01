@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.PaintDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.Menu;
@@ -21,6 +23,7 @@ import yuku.ambilwarna.AmbilWarnaDialog;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private DrawView drawView;
+    Button btnColor;
     Button btnShape;
     Button btnSize;
     int tColor, n = 0;
@@ -36,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         drawView = findViewById(R.id.sub_layout);
         tColor = ContextCompat.getColor(MainActivity.this, R.color.colorAccent);
 
-        Button btnColor = findViewById(R.id.btnColor);
+        btnColor = findViewById(R.id.btnColor);
         btnSize = findViewById(R.id.btnSize);
         btnShape = findViewById(R.id.btnShape);
         Button btnUndo = findViewById(R.id.btnUndo);
@@ -97,6 +100,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
   //              }
    //             else if (n == 2) {
                     //drawView.setBackgroundColor(tColor);
+                    btnColor.setBackgroundColor(color);
                     drawView.setColor(color, getWidth());
 
             }
@@ -120,7 +124,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         shapeSetting.show();
     }
 
-    public void getColor() {
+    public int getColor() {
+        return ((ColorDrawable) btnColor.getBackground()).getColor();
     }
 
     public float getWidth() {
