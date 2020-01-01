@@ -16,7 +16,7 @@
             android:id="@+id/btnColor"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:background="BLACK"
+            android:background="@color/BLACK"
             android:text="색" />
 
         <Button

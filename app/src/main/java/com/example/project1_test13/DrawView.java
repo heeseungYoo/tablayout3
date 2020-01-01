@@ -182,10 +182,10 @@ public class DrawView extends View  {
         mPaint.getStrokeWidth();
   */  }
 
-    public void setWidth(float width) {
+    public void setWidth(int color, float width) {
         init();
  //       mPaint = new Paint();
- //       mPaint.setColor(color);
+        mPaint.setColor(color);
         mPaint.setStrokeWidth(width);
   //      mPaint.setStyle(Paint.Style.STROKE);
         /*

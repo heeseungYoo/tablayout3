@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void penSettingEvent(float value) {
                 String btnText = value + "";
                 btnSize.setText(btnText);
-                drawView.setWidth(value);
+                drawView.setWidth(getColor(), value);
             }
         });
         penSetting.show();
