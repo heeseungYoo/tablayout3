@@ -21,7 +21,11 @@ import yuku.ambilwarna.AmbilWarnaDialog;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
     private DrawView drawView;
+    Button btnShape;
+    Button btnSize;
     int tColor, n = 0;
+    int color =0;
+    float width = 3.0f;
 
 
     @Override
@@ -33,8 +37,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tColor = ContextCompat.getColor(MainActivity.this, R.color.colorAccent);
 
         Button btnColor = findViewById(R.id.btnColor);
-        Button btnSize= findViewById(R.id.btnSize);
-        Button btnShape = findViewById(R.id.btnShape);
+        btnSize = findViewById(R.id.btnSize);
+        btnShape = findViewById(R.id.btnShape);
         Button btnUndo = findViewById(R.id.btnUndo);
         Button btnRedo = findViewById(R.id.btnRedo);
         Button btnErase = findViewById(R.id.btnErase);
@@ -54,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         switch(view.getId()) {
             case R.id.btnColor:
-                n = 2;
+ //               n = 2;
                 openColorPicker();
                 break;
             case R.id.btnSize:
@@ -69,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             case R.id.btnRedo:
                 drawView.onClickRedo();
             case R.id.btnErase:
+                drawView.reset();
                 //두께 두껍게..?
                 break;
             case R.id.btnSave:
@@ -86,26 +91,44 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
             @Override
             public void onOk(AmbilWarnaDialog dialog, int color) {
-                tColor = color;
-                if (n == 1) {
+  //              tColor = color;
+//                if (n == 1) {
                     //paint color 바꾸기
-                }
-                else if (n == 2) {
-                    drawView.setBackgroundColor(tColor);
-                }
+  //              }
+   //             else if (n == 2) {
+                    //drawView.setBackgroundColor(tColor);
+                    drawView.setColor(color, getWidth());
+
             }
         });
         colorPicker.show();
     }
 
     public void openSizeChange() {
-        PenSetting penSetting = new PenSetting(this);
+        final PenSetting penSetting = new PenSetting(this, new PenSetting.PenSettingEventListener() {
+            public void penSettingEvent(float value) {
+                String btnText = value + "";
+                btnSize.setText(btnText);
+                drawView.setWidth(value);
+            }
+        });
         penSetting.show();
     }
 
     public void openShape() {
         ShapeSetting shapeSetting = new ShapeSetting(this);
         shapeSetting.show();
+    }
+
+    public void getColor() {
+    }
+
+    public float getWidth() {
+        String btnText;
+        final StringBuilder sb = new StringBuilder(btnSize.getText().length());
+        sb.append(btnSize.getText());
+        btnText = sb.toString();
+        return Float.valueOf(btnText);
     }
 
 

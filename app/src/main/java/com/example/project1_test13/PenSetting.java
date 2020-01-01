@@ -19,6 +19,17 @@ public class PenSetting extends Dialog {
     private TextView mCurValue;
     private int num = 3;
 
+    public interface PenSettingEventListener {
+        public void penSettingEvent(float value);
+    }
+
+    private PenSettingEventListener onPenSettingEventListener;
+
+    public PenSetting(Context context, PenSettingEventListener onPenSettingEventListener) {
+        super(context);
+        this.onPenSettingEventListener = onPenSettingEventListener;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,8 +73,9 @@ public class PenSetting extends Dialog {
         mRightButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getContext(), "숫자" + mThicknessBar.getProgress() ,
+                Toast.makeText(getContext(), "두께" + mThicknessBar.getProgress() ,
                         Toast.LENGTH_SHORT).show();
+                onPenSettingEventListener.penSettingEvent(mThicknessBar.getProgress());
                 // width 값 setting 하기
                 dismiss();
             }
@@ -71,12 +83,12 @@ public class PenSetting extends Dialog {
 
     }
 
-    public PenSetting(Context context) {
-        super(context);
-    }
+
 
     public void update() {
         mCurValue.setText(new StringBuilder().append(num));
     }
+
+
 
 }

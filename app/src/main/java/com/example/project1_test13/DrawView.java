@@ -2,6 +2,7 @@ package com.example.project1_test13;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -9,6 +10,7 @@ import android.graphics.Path;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.ColorInt;
 
@@ -22,18 +24,34 @@ public class DrawView extends View  {
 
     private Canvas mCanvas;
     private Paint mPaint;
-    private Path mPath;
+    private Path mPath = new Path();
+    private Bitmap mBitmap;
     private float mX, mY;
 
     private ArrayList<Path> paths = new ArrayList<>();
     private ArrayList<Path> undonePaths = new ArrayList<>();
 
+    private ArrayList<Point> arrP = new ArrayList<>();
+    private ArrayList<Point> undoArrP = new ArrayList<>();
+    int color;
+
     public DrawView(Context context) {
         super(context);
+        init();
     }
 
     public DrawView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init();
+
+    }
+
+    public DrawView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init();
+    }
+
+    private void init() {
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mPaint.setDither(true);
@@ -43,11 +61,6 @@ public class DrawView extends View  {
         mPaint.setStrokeCap(Paint.Cap.ROUND);
         mPaint.setStrokeWidth(DEFAULT_STROKE_WIDTH);
         mCanvas = new Canvas();
-        mPath = new Path();
-    }
-
-    public DrawView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
 
 
     }
@@ -55,14 +68,26 @@ public class DrawView extends View  {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
+        Bitmap img = Bitmap.createBitmap(w, h, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas();
+        canvas.setBitmap(img);
+        canvas.drawColor(Color.WHITE);
+
+        mBitmap = img;
+        mCanvas = canvas;
     }
 
 
 
     @Override
-    protected synchronized void onDraw(Canvas canvas) {
-        for (Path p : paths){
-            canvas.drawPath(p, mPaint);
+    protected void onDraw(Canvas canvas) {
+
+        if (mBitmap != null) {
+            canvas.drawBitmap(mBitmap, 0, 0, null);
+        }
+
+        for (Point p : arrP){
+            canvas.drawPath(p.path, p.paint);
         }
         canvas.drawPath(mPath, mPaint);
     }
@@ -73,7 +98,8 @@ public class DrawView extends View  {
         float y = event.getY();
         switch (event.getAction()){
             case MotionEvent.ACTION_DOWN:
-                undonePaths.clear();
+                undoArrP.clear();
+                //undonePaths.clear();
                 mPath.reset();
                 mPath.moveTo(x, y);
                 mX = x;
@@ -95,7 +121,8 @@ public class DrawView extends View  {
             case MotionEvent.ACTION_UP:
                 mPath.lineTo(mX, mY);
                 mCanvas.drawPath(mPath, mPaint);
-                paths.add(mPath);
+                arrP.add(new Point (mPath, mPaint));
+               // paths.add(mPath);
                 mPath = new Path();
                 invalidate();
                 break;
@@ -105,24 +132,78 @@ public class DrawView extends View  {
 
 
     public void onClickUndo () {
+        if(arrP.size() > 0) {
+            undoArrP.add(arrP.remove(arrP.size()-1));
+            invalidate();
+        } else {}
+        /*
         if (paths.size()>0) {
             undonePaths.add(paths.remove(paths.size()-1));
             invalidate();
         }else{
-        }
+        }*/
     }
 
     public void onClickRedo (){
+        if(undoArrP.size()>0) {
+            arrP.add(undoArrP.remove(undoArrP.size()-1));
+            invalidate();
+        } else {
+            Toast.makeText(getContext(), "undoarrp: " + undoArrP.size(), Toast.LENGTH_SHORT).show();
+        }
+        /*
         if (undonePaths.size()>0){
             paths.add(undonePaths.remove(undonePaths.size()-1));
             invalidate();
         }else {
-        }
+        }*/
     }
 
     public void setSize(float width) {
         mPaint.setStrokeWidth(width);
         invalidate();
     }
+
+    //getWidth, getShape 해야함
+    public void setColor(int color, float width) {
+        init();
+ //       mPaint = new Paint();
+        mPaint.setColor(color);
+   //     mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setStrokeWidth(width);
+
+/*
+        mPaint.setAntiAlias(true);
+        mPaint.setDither(true);
+
+        mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setStrokeJoin(Paint.Join.ROUND);
+        mPaint.setStrokeCap(Paint.Cap.ROUND);
+        mPaint.getStrokeWidth();
+  */  }
+
+    public void setWidth(float width) {
+        init();
+ //       mPaint = new Paint();
+ //       mPaint.setColor(color);
+        mPaint.setStrokeWidth(width);
+  //      mPaint.setStyle(Paint.Style.STROKE);
+        /*
+        mPaint.getColor();
+        mPaint.setAntiAlias(true);
+        mPaint.setDither(true);
+        mPaint.setStyle(Paint.Style.STROKE);
+        mPaint.setStrokeJoin(Paint.Join.ROUND);
+        mPaint.setStrokeCap(Paint.Cap.ROUND);*/
+    }
+
+
+
+    public void reset() {
+        arrP.clear();
+        undoArrP.clear();
+        invalidate();
+    }
+
 
 }
